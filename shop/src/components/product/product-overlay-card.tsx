@@ -89,7 +89,8 @@ const ProductOverlayCard: React.FC<ProductProps> = ({
           <Image
             src={
               product?.image?.original ??
-              settings.product.placeholderImage('featured')
+              settings?.product?.placeholderImage?.featured ??
+              '/assets/placeholder/products/product-featured.svg'
             }
             fill
             loading={imgLoading}

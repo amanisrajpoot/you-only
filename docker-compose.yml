@@ -1,0 +1,240 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: chawkbazar_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${DB_DATABASE:-chawkbazar}
+      MYSQL_USER: ${DB_USERNAME:-chawkbazar_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-chawkbazar_password}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./chawkbazar-api/public/sql:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    networks:
+      - chawkbazar_network
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD:-rootpassword}"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: chawkbazar_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - chawkbazar_network
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+  # Laravel Backend API
+  backend:
+    build:
+      context: ./chawkbazar-api
+      dockerfile: Dockerfile
+    container_name: chawkbazar_backend
+    restart: unless-stopped
+    environment:
+      - APP_ENV=${APP_ENV:-production}
+      - APP_DEBUG=${APP_DEBUG:-false}
+      - APP_KEY=${APP_KEY}
+      - APP_URL=${APP_URL:-http://localhost:8000}
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE:-chawkbazar}
+      - DB_USERNAME=${DB_USERNAME:-chawkbazar_user}
+      - DB_PASSWORD=${DB_PASSWORD:-chawkbazar_password}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-}
+      - CACHE_DRIVER=redis
+      - SESSION_DRIVER=redis
+      - QUEUE_CONNECTION=redis
+    volumes:
+      - backend_storage:/var/www/html/storage
+      - backend_bootstrap_cache:/var/www/html/bootstrap/cache
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - chawkbazar_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Next.js Admin Frontend
+  admin:
+    build:
+      context: ./admin/rest
+      dockerfile: Dockerfile
+    container_name: chawkbazar_admin
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_REST_API_ENDPOINT=${NEXT_PUBLIC_REST_API_ENDPOINT:-http://localhost:8000}
+      - NEXT_PUBLIC_SHOP_URL=${NEXT_PUBLIC_SHOP_URL:-http://localhost:3003}
+      - NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL:-http://localhost:3002}
+    ports:
+      - "3002:3002"
+    depends_on:
+      - backend
+    networks:
+      - chawkbazar_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3002/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Next.js Shop Frontend
+  shop:
+    build:
+      context: ./shop
+      dockerfile: Dockerfile
+    container_name: chawkbazar_shop
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_REST_API_ENDPOINT=${NEXT_PUBLIC_REST_API_ENDPOINT:-http://localhost:8000}
+      - NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL:-http://localhost:3003}
+    ports:
+      - "3003:3003"
+    depends_on:
+      - backend
+    networks:
+      - chawkbazar_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3003/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: chawkbazar_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/ssl:/etc/nginx/ssl
+      - backend_storage:/var/www/html/storage
+    depends_on:
+      - backend
+      - admin
+      - shop
+    networks:
+      - chawkbazar_network
+
+  # Laravel Queue Worker
+  queue:
+    build:
+      context: ./chawkbazar-api
+      dockerfile: Dockerfile
+    container_name: chawkbazar_queue
+    restart: unless-stopped
+    command: php artisan queue:work --verbose --tries=3 --timeout=90
+    environment:
+      - APP_ENV=${APP_ENV:-production}
+      - APP_DEBUG=${APP_DEBUG:-false}
+      - APP_KEY=${APP_KEY}
+      - APP_URL=${APP_URL:-http://localhost:8000}
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE:-chawkbazar}
+      - DB_USERNAME=${DB_USERNAME:-chawkbazar_user}
+      - DB_PASSWORD=${DB_PASSWORD:-chawkbazar_password}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-}
+      - CACHE_DRIVER=redis
+      - SESSION_DRIVER=redis
+      - QUEUE_CONNECTION=redis
+    volumes:
+      - backend_storage:/var/www/html/storage
+      - backend_bootstrap_cache:/var/www/html/bootstrap/cache
+    depends_on:
+      - mysql
+      - redis
+      - backend
+    networks:
+      - chawkbazar_network
+
+  # Laravel Scheduler
+  scheduler:
+    build:
+      context: ./chawkbazar-api
+      dockerfile: Dockerfile
+    container_name: chawkbazar_scheduler
+    restart: unless-stopped
+    command: sh -c "while true; do php artisan schedule:run; sleep 60; done"
+    environment:
+      - APP_ENV=${APP_ENV:-production}
+      - APP_DEBUG=${APP_DEBUG:-false}
+      - APP_KEY=${APP_KEY}
+      - APP_URL=${APP_URL:-http://localhost:8000}
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE:-chawkbazar}
+      - DB_USERNAME=${DB_USERNAME:-chawkbazar_user}
+      - DB_PASSWORD=${DB_PASSWORD:-chawkbazar_password}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-}
+      - CACHE_DRIVER=redis
+      - SESSION_DRIVER=redis
+      - QUEUE_CONNECTION=redis
+    volumes:
+      - backend_storage:/var/www/html/storage
+      - backend_bootstrap_cache:/var/www/html/bootstrap/cache
+    depends_on:
+      - mysql
+      - redis
+      - backend
+    networks:
+      - chawkbazar_network
+
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+  backend_storage:
+    driver: local
+  backend_bootstrap_cache:
+    driver: local
+
+networks:
+  chawkbazar_network:
+    driver: bridge

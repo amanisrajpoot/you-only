@@ -7,22 +7,22 @@ export const footer = {
         {
           id: 1,
           title: 'link-support-center',
-          path: '/',
+          path: '/contact-us',
         },
         {
           id: 2,
           title: 'link-customer-support',
-          path: '/',
+          path: '/contact-us',
         },
         {
           id: 3,
           title: 'link-about-us',
-          path: '/',
+          path: '/contact-us',
         },
         {
           id: 4,
           title: 'link-copyright',
-          path: '/',
+          path: '/privacy',
         },
       ],
     },
@@ -38,12 +38,12 @@ export const footer = {
         {
           id: 2,
           title: 'link-shipping',
-          path: '/',
+          path: '/terms',
         },
         {
           id: 3,
           title: 'link-exchanges',
-          path: '/',
+          path: '/terms',
         },
       ],
     },
@@ -64,12 +64,12 @@ export const footer = {
         {
           id: 3,
           title: 'link-return-policy',
-          path: '/privacy',
+          path: '/terms',
         },
         {
           id: 4,
           title: 'link-site-map',
-          path: '/',
+          path: '/products',
         },
       ],
     },
@@ -80,22 +80,22 @@ export const footer = {
         {
           id: 1,
           title: 'link-announcements',
-          path: '/',
+          path: '/offers',
         },
         {
           id: 2,
           title: 'link-answer-center',
-          path: '/',
+          path: '/faq',
         },
         {
           id: 3,
           title: 'link-discussion-boards',
-          path: '/',
+          path: '/contact-us',
         },
         {
           id: 4,
           title: 'link-giving-works',
-          path: '/',
+          path: '/become-seller',
         },
       ],
     },

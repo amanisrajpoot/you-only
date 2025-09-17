@@ -2,6 +2,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import Router from 'next/router';
 import invariant from 'tiny-invariant';
+import { AUTH_CRED } from '@/utils/constants';
 
 invariant(
   process.env.NEXT_PUBLIC_REST_API_ENDPOINT,
@@ -15,7 +16,7 @@ const Axios = axios.create({
   },
 });
 // Change request data/error
-const AUTH_TOKEN_KEY = process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY ?? 'authToken';
+const AUTH_TOKEN_KEY = process.env.NEXT_PUBLIC_AUTH_TOKEN_KEY ?? AUTH_CRED;
 Axios.interceptors.request.use((config) => {
   const cookies = Cookies.get(AUTH_TOKEN_KEY);
   let token = '';
@@ -41,7 +42,8 @@ Axios.interceptors.response.use(
         error.response.data.message === 'CHAWKBAZAR_ERROR.NOT_AUTHORIZED')
     ) {
       Cookies.remove(AUTH_TOKEN_KEY);
-      Router.reload();
+      // Use push instead of reload to avoid page refresh
+      Router.push('/login');
     }
     return Promise.reject(error);
   },

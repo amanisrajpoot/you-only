@@ -41,7 +41,10 @@ const LoginForm = () => {
           if (data?.token) {
             if (hasAccess(allowedRoles, data?.permissions)) {
               setAuthCredentials(data?.token, data?.permissions, data?.role);
-              Router.push(Routes.dashboard);
+              // Small delay to ensure credentials are set before navigation
+              setTimeout(() => {
+                Router.push(Routes.dashboard);
+              }, 100);
               return;
             }
             setErrorMessage('form:error-enough-permission');
@@ -49,7 +52,14 @@ const LoginForm = () => {
             setErrorMessage('form:error-credential-wrong');
           }
         },
-        onError: () => {},
+        onError: (error) => {
+          console.error('Login error:', error);
+          if (error?.response?.data?.message) {
+            setErrorMessage(error.response.data.message);
+          } else {
+            setErrorMessage('form:error-credential-wrong');
+          }
+        },
       }
     );
   }

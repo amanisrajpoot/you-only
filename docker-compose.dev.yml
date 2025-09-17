@@ -1,0 +1,129 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: chawkbazar_mysql_dev
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${DB_DATABASE:-chawkbazar_dev}
+      MYSQL_USER: ${DB_USERNAME:-chawkbazar_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-chawkbazar_password}
+    volumes:
+      - mysql_dev_data:/var/lib/mysql
+      - ./chawkbazar-api/public/sql:/docker-entrypoint-initdb.d
+    ports:
+      - "3307:3306"
+    networks:
+      - chawkbazar_dev_network
+    command: --default-authentication-plugin=mysql_native_password
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: chawkbazar_redis_dev
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_dev_data:/data
+    networks:
+      - chawkbazar_dev_network
+    command: redis-server --appendonly yes
+
+  # Laravel Backend API (Development)
+  backend:
+    build:
+      context: ./chawkbazar-api
+      dockerfile: Dockerfile
+    container_name: chawkbazar_backend_dev
+    restart: unless-stopped
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - APP_KEY=${APP_KEY}
+      - APP_URL=http://localhost:8000
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE:-chawkbazar_dev}
+      - DB_USERNAME=${DB_USERNAME:-chawkbazar_user}
+      - DB_PASSWORD=${DB_PASSWORD:-chawkbazar_password}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD:-}
+      - CACHE_DRIVER=redis
+      - SESSION_DRIVER=redis
+      - QUEUE_CONNECTION=redis
+    volumes:
+      - ./chawkbazar-api:/var/www/html
+      - backend_dev_storage:/var/www/html/storage
+      - backend_dev_bootstrap_cache:/var/www/html/bootstrap/cache
+    ports:
+      - "8001:8000"
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - chawkbazar_dev_network
+
+  # Next.js Admin Frontend (Development)
+  admin:
+    build:
+      context: ./admin/rest
+      dockerfile: Dockerfile
+    container_name: chawkbazar_admin_dev
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_REST_API_ENDPOINT=http://localhost:8001
+      - NEXT_PUBLIC_SHOP_URL=http://localhost:3004
+      - NEXT_PUBLIC_SITE_URL=http://localhost:3003
+    volumes:
+      - ./admin/rest:/app
+      - /app/node_modules
+      - /app/.next
+    ports:
+      - "3003:3002"
+    depends_on:
+      - backend
+    networks:
+      - chawkbazar_dev_network
+
+  # Next.js Shop Frontend (Development)
+  shop:
+    build:
+      context: ./shop
+      dockerfile: Dockerfile
+    container_name: chawkbazar_shop_dev
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_REST_API_ENDPOINT=http://localhost:8001
+      - NEXT_PUBLIC_SITE_URL=http://localhost:3004
+    volumes:
+      - ./shop:/app
+      - /app/node_modules
+      - /app/.next
+    ports:
+      - "3004:3003"
+    depends_on:
+      - backend
+    networks:
+      - chawkbazar_dev_network
+
+volumes:
+  mysql_dev_data:
+    driver: local
+  redis_dev_data:
+    driver: local
+  backend_dev_storage:
+    driver: local
+  backend_dev_bootstrap_cache:
+    driver: local
+
+networks:
+  chawkbazar_dev_network:
+    driver: bridge

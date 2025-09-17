@@ -171,6 +171,20 @@ const MailchimpForm: React.FC<MailchimpFormProps> = ({
 }) => {
   const url = process.env.NEXT_PUBLIC_MAILCHIMP_URL;
 
+  // If no Mailchimp URL is configured, show a simple subscription form
+  if (!url) {
+    return (
+      <div className="text-center">
+        <p className="text-sm text-gray-600 mb-2">
+          Newsletter subscription is not configured
+        </p>
+        <p className="text-xs text-gray-500">
+          Please configure NEXT_PUBLIC_MAILCHIMP_URL to enable newsletter subscription
+        </p>
+      </div>
+    );
+  }
+
   return (
     <MailchimpSubscribe
       url={url as string}
