@@ -28,7 +28,7 @@ const settings = [
   {
     id: 3,
     key: 'site_logo',
-    value: 'http://localhost:8000/uploads/logo.png',
+    value: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=200&h=60&fit=crop',
     type: 'string',
     description: 'The logo of the website',
     group: 'general',
@@ -160,8 +160,8 @@ router.get('/', async (req, res) => {
         },
         logo: {
           id: 1,
-          original: "http://localhost:8000/uploads/logo.png",
-          thumbnail: "http://localhost:8000/uploads/logo.png"
+          original: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=200&h=60&fit=crop",
+          thumbnail: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=200&h=60&fit=crop"
         },
         taxRate: 10,
         shippingClass: 1,
@@ -204,7 +204,91 @@ router.get('/', async (req, res) => {
           onSaleSettings: {
             slug: 'on-sale'
           }
-        }
+        },
+        defaultShop: {
+          id: 1,
+          name: 'Chawkbazar Store',
+          slug: 'chawkbazar-store',
+          description: 'Your one-stop shop for all your needs',
+          owner_id: 1,
+          owner: {
+            id: 1,
+            name: 'Super Admin',
+            email: 'admin@chawkbazar.com'
+          },
+          logo: {
+            id: 1,
+            original: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=200&h=60&fit=crop',
+            thumbnail: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=200&h=60&fit=crop'
+          },
+          banner: {
+            id: 1,
+            original: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&h=400&fit=crop',
+            thumbnail: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=200&fit=crop'
+          },
+          address: {
+            street: '123 Main Street',
+            city: 'New York',
+            state: 'NY',
+            zip: '10001',
+            country: 'United States'
+          },
+          contact: {
+            phone: '+1234567890',
+            email: 'contact@chawkbazar.com',
+            website: 'https://chawkbazar.com'
+          },
+          social_links: {
+            facebook: 'https://facebook.com/chawkbazar',
+            twitter: 'https://twitter.com/chawkbazar',
+            instagram: 'https://instagram.com/chawkbazar'
+          },
+          is_active: true,
+          is_verified: true,
+          rating: 4.9,
+          total_products: 100,
+          total_orders: 500,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        },
+        deliveryTime: [
+          {
+            id: 1,
+            title: 'Same Day Delivery',
+            slug: 'same-day-delivery',
+            description: 'Get your order delivered on the same day',
+            minimum_duration: 1,
+            maximum_duration: 1,
+            duration_unit: 'day',
+            active: true,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            id: 2,
+            title: 'Next Day Delivery',
+            slug: 'next-day-delivery',
+            description: 'Get your order delivered the next day',
+            minimum_duration: 1,
+            maximum_duration: 2,
+            duration_unit: 'day',
+            active: true,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          },
+          {
+            id: 3,
+            title: 'Standard Delivery',
+            slug: 'standard-delivery',
+            description: 'Standard delivery within 3-5 business days',
+            minimum_duration: 3,
+            maximum_duration: 5,
+            duration_unit: 'day',
+            active: true,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+          }
+        ]
       },
       language: language,
       maintenance: {

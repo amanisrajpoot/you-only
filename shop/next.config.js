@@ -29,6 +29,7 @@ module.exports = withPWA({
       'scontent.cdninstagram.com',
       'lh3.googleusercontent.com',
       'images.unsplash.com',
+      'logos-world.net',
     ],
   },
 

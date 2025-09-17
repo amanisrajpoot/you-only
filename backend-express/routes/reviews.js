@@ -19,8 +19,8 @@ const reviews = [
     photos: [
       {
         id: 1,
-        original: 'http://localhost:8000/uploads/reviews/review-1.jpg',
-        thumbnail: 'http://localhost:8000/uploads/reviews/review-1.jpg'
+        original: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop',
+        thumbnail: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop'
       }
     ],
     is_approved: true,

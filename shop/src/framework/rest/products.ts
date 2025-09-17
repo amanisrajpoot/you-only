@@ -10,11 +10,14 @@ import {
 } from "react-query";
 import client from '@framework/utils/index'
 import { useRouter } from 'next/router';
+import { useShopIdWithFallback } from '../../hooks/use-shop-id';
 
 export function useProductsInfinite(params: ProductsQueryOptionsType) {
   const { locale } = useRouter();
+  const shopId = useShopIdWithFallback(params.shop_id);
   const formattedOptions = {
     ...params,
+    shop_id: shopId,
     language: locale,
   };
   return useInfiniteQuery<ProductPaginator, Error>(
@@ -30,8 +33,10 @@ export function useProductsInfinite(params: ProductsQueryOptionsType) {
 
 export const useProducts = (options: ProductsQueryOptionsType) => {
   const { locale } = useRouter();
+  const shopId = useShopIdWithFallback(options.shop_id);
   const formattedOptions = {
     ...options,
+    shop_id: shopId,
     language: locale,
   };
   const { data, isLoading, error } = useQuery<ProductPaginator, Error>(
@@ -70,8 +75,10 @@ export const usePopularProducts = (options: {
   shop_id?: number;
 }) => {
   const { locale } = useRouter();
+  const shopId = useShopIdWithFallback(options.shop_id);
   const formattedOptions = {
     ...options,
+    shop_id: shopId,
     language: locale,
   };
   const { data, isLoading, error } = useQuery<ProductPaginator, Error>(

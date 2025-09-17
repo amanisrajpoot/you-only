@@ -8,6 +8,7 @@ import { useSettings } from '@contexts/settings.context';
 import { useUI } from '@contexts/ui.context';
 import { menu } from '@data/static/menus';
 import { useShop, useShopMaintenanceEvent } from '@framework/shops';
+import { useShop as useShopContext } from '@contexts/shop.context';
 import {
   RESPONSIVE_WIDTH,
   checkIsMaintenanceModeComing,
@@ -50,8 +51,12 @@ const Header: React.FC<Props> = ({ variant = 'default' }) => {
   } = router;
   const { data: shopData, isLoading } = useShop({
     slug: slug as string,
-    enabled: Boolean(slug),
+    enabled: Boolean(slug && slug !== 'undefined'),
   });
+  const { shop: contextShop } = useShopContext();
+  
+  // Use shop data from context if no specific shop is loaded
+  const currentShop = shopData || contextShop;
   const { width } = useWindowSize();
   const handleMobileMenu = useCallback(() => {
     return openSidebar({
@@ -82,7 +87,7 @@ const Header: React.FC<Props> = ({ variant = 'default' }) => {
       !isScrolling &&
       shopUnderMaintenanceIsComing &&
       !isLoading &&
-      shopData);
+      currentShop);
   return (
     <header
       id="siteHeader"
@@ -113,25 +118,25 @@ const Header: React.FC<Props> = ({ variant = 'default' }) => {
       !isScrolling &&
       shopUnderMaintenanceIsComing &&
       !isLoading &&
-      shopData ? (
+      currentShop ? (
         <Alert
-          message={`${shopData?.name} ${t('text-maintenance-mode-title')}`}
+          message={`${currentShop?.name} ${t('text-maintenance-mode-title')}`}
           variant="info"
           className="sticky top-0 left-0 z-50 top-bar-counter"
           childClassName="flex justify-center items-center font-bold w-full gap-4"
         >
           <CountdownTimer
             date={
-              new Date(shopData?.settings?.shopMaintenance?.start as string)
+              new Date(currentShop?.settings?.shopMaintenance?.start as string)
             }
             className="text-blue-600 [&>p]:bg-blue-200 [&>p]:p-2 [&>p]:text-xs [&>p]:text-blue-600"
             onComplete={() => {
               setShopUnderMaintenanceStart(true);
               createShopMaintenanceEventRequest({
-                shop_id: shopData?.id,
+                shop_id: currentShop?.id,
                 isMaintenance: true,
                 isShopUnderMaintenance: Boolean(
-                  shopData?.settings?.isShopUnderMaintenance,
+                  currentShop?.settings?.isShopUnderMaintenance,
                 ),
               });
             }}

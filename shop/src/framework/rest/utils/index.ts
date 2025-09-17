@@ -87,7 +87,7 @@ class Client {
         min_price,
         max_price,
       } = params;
-      return HttpClient.get<Type[]>(API_ENDPOINTS.TYPE, {
+      return HttpClient.get<TypePaginator>(API_ENDPOINTS.TYPE, {
         searchJoin: 'and',
         limit,
         sortedBy,
@@ -214,7 +214,7 @@ class Client {
         parent,
       });
       // const queryString = `?search=${searchString}&searchJoin=and&limit=${limit}&sortedBy=${sortedBy}&orderBy=${orderBy}&with=products`;
-      return HttpClient.get<Category[]>(API_ENDPOINTS.CATEGORIES, {
+      return HttpClient.get<CategoryPaginator>(API_ENDPOINTS.CATEGORIES, {
         search: searchString,
         ...params,
         searchJoin: 'and',
@@ -356,7 +356,6 @@ class Client {
         type,
         name,
         category,
-        tags,
         variations,
         status,
         shop_id,
@@ -367,6 +366,7 @@ class Client {
       });
       return HttpClient.get<ProductPaginator>(API_ENDPOINTS.PRODUCTS, {
         search: searchString,
+        tags,
         ...params,
         searchJoin: 'and',
         limit,

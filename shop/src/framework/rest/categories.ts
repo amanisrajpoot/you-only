@@ -49,7 +49,7 @@ export const useCategories = (options: CategoriesQueryOptionsType) => {
     ...options,
     language: locale,
   };
-  const { data, isLoading, error } = useQuery<Category[], Error>(
+  const { data, isLoading, error } = useQuery<CategoryPaginator, Error>(
     [API_ENDPOINTS.CATEGORIES, formattedOptions],
     ({ queryKey, pageParam }) =>
       client.category.find(Object.assign({}, queryKey[1], pageParam)),
@@ -59,7 +59,7 @@ export const useCategories = (options: CategoriesQueryOptionsType) => {
   );
 
   return {
-    data: data ?? [],
+    data: data?.data ?? [],
     isLoading,
     error,
   };

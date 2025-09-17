@@ -121,7 +121,7 @@ const CategoryBlock: React.FC<CategoriesProps> = ({
     parent: null,
   });
 
-  if (!loading && isEmpty(categories?.data)) {
+  if (!loading && isEmpty(categories)) {
     return <NotFoundItem text={t('text-no-categories-found')} />;
   }
 
@@ -150,12 +150,12 @@ const CategoryBlock: React.FC<CategoriesProps> = ({
           autoplay={{ delay: 3500 }}
           loop={
             sliderBreakpoints[maxValue]?.slidesPerView <=
-            categories?.data?.length
+            categories?.length
           }
           prevActivateId="categoriesSlidePrev"
           nextActivateId="categoriesSlideNext"
         >
-          {loading && !categories?.data
+          {loading && !categories
             ? Array.from({ length: 10 }).map((_, idx) => {
                 if (variant === 'rounded') {
                   return (
@@ -176,7 +176,7 @@ const CategoryBlock: React.FC<CategoriesProps> = ({
                   </SwiperSlide>
                 );
               })
-            : categories?.data?.map((category) => (
+            : categories?.map((category) => (
                 <SwiperSlide key={`category--key-${category.id}`}>
                   <Card
                     item={category}

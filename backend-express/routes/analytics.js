@@ -8,54 +8,20 @@ router.get('/', async (req, res) => {
   try {
     // Mock analytics data - replace with actual database queries
     const analyticsData = {
-      totalRevenue: {
-        total: 125000,
-        growth: 12.5,
-        graphData: [
-          { name: 'Jan', revenue: 10000 },
-          { name: 'Feb', revenue: 12000 },
-          { name: 'Mar', revenue: 15000 },
-          { name: 'Apr', revenue: 18000 },
-          { name: 'May', revenue: 22000 },
-          { name: 'Jun', revenue: 25000 }
-        ]
-      },
-      totalOrders: {
-        total: 1250,
-        growth: 8.2,
-        graphData: [
-          { name: 'Jan', orders: 100 },
-          { name: 'Feb', orders: 120 },
-          { name: 'Mar', orders: 150 },
-          { name: 'Apr', orders: 180 },
-          { name: 'May', orders: 220 },
-          { name: 'Jun', orders: 250 }
-        ]
-      },
-      totalCustomers: {
-        total: 850,
-        growth: 15.3,
-        graphData: [
-          { name: 'Jan', customers: 80 },
-          { name: 'Feb', customers: 95 },
-          { name: 'Mar', customers: 120 },
-          { name: 'Apr', customers: 140 },
-          { name: 'May', customers: 160 },
-          { name: 'Jun', customers: 180 }
-        ]
-      },
-      totalProducts: {
-        total: 450,
-        growth: 5.7,
-        graphData: [
-          { name: 'Jan', products: 400 },
-          { name: 'Feb', products: 410 },
-          { name: 'Mar', products: 420 },
-          { name: 'Apr', products: 430 },
-          { name: 'May', products: 440 },
-          { name: 'Jun', products: 450 }
-        ]
-      },
+      totalRevenue: 125000,
+      todaysRevenue: 2500,
+      totalOrders: 1250,
+      todaysOrders: 25,
+      totalVendors: 45,
+      totalShops: 12,
+      totalCustomers: 850,
+      totalProducts: 450,
+      todayTotalOrderByStatus: [
+        { name: 'Pending', value: 5 },
+        { name: 'Processing', value: 8 },
+        { name: 'Shipped', value: 12 },
+        { name: 'Delivered', value: 15 }
+      ],
       topProducts: [
         {
           id: 1,
@@ -113,10 +79,7 @@ router.get('/', async (req, res) => {
       ]
     };
 
-    res.json({
-      success: true,
-      data: analyticsData
-    });
+    res.json(analyticsData);
 
   } catch (error) {
     console.error('Get analytics error:', error);
@@ -173,18 +136,7 @@ router.get('/low-stock-products', async (req, res) => {
     const offset = (currentPage - 1) * perPage;
     const paginatedProducts = lowStockProducts.slice(offset, offset + perPage);
 
-    res.json({
-      success: true,
-      data: paginatedProducts,
-      meta: {
-        total,
-        per_page: perPage,
-        current_page: currentPage,
-        last_page: totalPages,
-        from: offset + 1,
-        to: Math.min(offset + perPage, total)
-      }
-    });
+    res.json(paginatedProducts);
 
   } catch (error) {
     console.error('Get low stock products error:', error);

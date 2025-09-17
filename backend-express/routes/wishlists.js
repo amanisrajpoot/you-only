@@ -16,8 +16,8 @@ const wishlists = [
       sale_price: 79.99,
       image: {
         id: 1,
-        original: 'http://localhost:8000/uploads/products/sample-1.jpg',
-        thumbnail: 'http://localhost:8000/uploads/products/sample-1.jpg'
+        original: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop',
+        thumbnail: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop'
       },
       shop: {
         id: 1,
@@ -40,8 +40,8 @@ const wishlists = [
       sale_price: null,
       image: {
         id: 2,
-        original: 'http://localhost:8000/uploads/products/sample-2.jpg',
-        thumbnail: 'http://localhost:8000/uploads/products/sample-2.jpg'
+        original: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&h=500&fit=crop',
+        thumbnail: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop'
       },
       shop: {
         id: 1,
@@ -64,8 +64,8 @@ const wishlists = [
       sale_price: 79.99,
       image: {
         id: 1,
-        original: 'http://localhost:8000/uploads/products/sample-1.jpg',
-        thumbnail: 'http://localhost:8000/uploads/products/sample-1.jpg'
+        original: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop',
+        thumbnail: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop'
       },
       shop: {
         id: 1,
@@ -181,8 +181,8 @@ router.post('/', [
         sale_price: 79.99,
         image: {
           id: parseInt(product_id),
-          original: `http://localhost:8000/uploads/products/product-${product_id}.jpg`,
-          thumbnail: `http://localhost:8000/uploads/products/product-${product_id}.jpg`
+          original: `https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop`,
+          thumbnail: `https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop`
         },
         shop: {
           id: 1,
@@ -285,8 +285,8 @@ router.post('/toggle', [
           sale_price: 79.99,
           image: {
             id: parseInt(product_id),
-            original: `http://localhost:8000/uploads/products/product-${product_id}.jpg`,
-            thumbnail: `http://localhost:8000/uploads/products/product-${product_id}.jpg`
+            original: `https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop`,
+            thumbnail: `https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop`
           },
           shop: {
             id: 1,

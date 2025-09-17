@@ -206,8 +206,8 @@ app.get('/top-authors', async (req, res) => {
         slug: 'john-smith',
         bio: 'Renowned author with over 20 years of experience.',
         image: {
-          original: 'http://localhost:8000/uploads/authors/john-smith.jpg',
-          thumbnail: 'http://localhost:8000/uploads/authors/john-smith.jpg'
+          original: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop',
+          thumbnail: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop'
         }
       },
       {
@@ -216,8 +216,8 @@ app.get('/top-authors', async (req, res) => {
         slug: 'sarah-johnson',
         bio: 'Expert in digital marketing and e-commerce.',
         image: {
-          original: 'http://localhost:8000/uploads/authors/sarah-johnson.jpg',
-          thumbnail: 'http://localhost:8000/uploads/authors/sarah-johnson.jpg'
+          original: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=300&h=300&fit=crop',
+          thumbnail: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop'
         }
       }
     ];
@@ -245,8 +245,8 @@ app.get('/top-manufacturers', async (req, res) => {
         slug: 'apple-inc',
         description: 'Leading technology company.',
         image: {
-          original: 'http://localhost:8000/uploads/manufacturers/apple.jpg',
-          thumbnail: 'http://localhost:8000/uploads/manufacturers/apple.jpg'
+          original: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=300&h=300&fit=crop',
+          thumbnail: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=150&h=150&fit=crop'
         }
       },
       {
@@ -255,8 +255,8 @@ app.get('/top-manufacturers', async (req, res) => {
         slug: 'samsung-electronics',
         description: 'Global technology leader.',
         image: {
-          original: 'http://localhost:8000/uploads/manufacturers/samsung.jpg',
-          thumbnail: 'http://localhost:8000/uploads/manufacturers/samsung.jpg'
+          original: 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=300&h=300&fit=crop',
+          thumbnail: 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=150&h=150&fit=crop'
         }
       }
     ];
@@ -532,14 +532,14 @@ app.get('/popular-products', async (req, res) => {
         product_type: 'simple',
         image: {
           id: 1,
-          original: 'http://localhost:8000/uploads/headphones.jpg',
-          thumbnail: 'http://localhost:8000/uploads/headphones.jpg'
+          original: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop',
+          thumbnail: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop'
         },
         gallery: [
           {
             id: 1,
-            original: 'http://localhost:8000/uploads/headphones.jpg',
-            thumbnail: 'http://localhost:8000/uploads/headphones.jpg'
+            original: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop',
+            thumbnail: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop'
           }
         ],
         type: {
@@ -585,14 +585,14 @@ app.get('/popular-products', async (req, res) => {
         product_type: 'simple',
         image: {
           id: 2,
-          original: 'http://localhost:8000/uploads/smartwatch.jpg',
-          thumbnail: 'http://localhost:8000/uploads/smartwatch.jpg'
+          original: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&h=500&fit=crop',
+          thumbnail: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop'
         },
         gallery: [
           {
             id: 2,
-            original: 'http://localhost:8000/uploads/smartwatch.jpg',
-            thumbnail: 'http://localhost:8000/uploads/smartwatch.jpg'
+            original: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&h=500&fit=crop',
+            thumbnail: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop'
           }
         ],
         type: {
@@ -638,14 +638,14 @@ app.get('/popular-products', async (req, res) => {
         product_type: 'simple',
         image: {
           id: 3,
-          original: 'http://localhost:8000/uploads/laptopstand.jpg',
-          thumbnail: 'http://localhost:8000/uploads/laptopstand.jpg'
+          original: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&h=500&fit=crop',
+          thumbnail: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=300&h=300&fit=crop'
         },
         gallery: [
           {
             id: 3,
-            original: 'http://localhost:8000/uploads/laptopstand.jpg',
-            thumbnail: 'http://localhost:8000/uploads/laptopstand.jpg'
+            original: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&h=500&fit=crop',
+            thumbnail: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=300&h=300&fit=crop'
           }
         ],
         type: {
@@ -691,14 +691,14 @@ app.get('/popular-products', async (req, res) => {
         product_type: 'simple',
         image: {
           id: 4,
-          original: 'http://localhost:8000/uploads/tshirt.jpg',
-          thumbnail: 'http://localhost:8000/uploads/tshirt.jpg'
+          original: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&h=500&fit=crop',
+          thumbnail: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop'
         },
         gallery: [
           {
             id: 4,
-            original: 'http://localhost:8000/uploads/tshirt.jpg',
-            thumbnail: 'http://localhost:8000/uploads/tshirt.jpg'
+            original: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&h=500&fit=crop',
+            thumbnail: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=300&h=300&fit=crop'
           }
         ],
         type: {

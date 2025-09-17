@@ -15,8 +15,8 @@ const authors = [
     ],
     image: {
       id: 1,
-      original: 'http://localhost:8000/uploads/authors/john-smith.jpg',
-      thumbnail: 'http://localhost:8000/uploads/authors/john-smith.jpg'
+      original: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop',
+      thumbnail: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop'
     },
     is_approved: true,
     language: 'en',
@@ -34,8 +34,8 @@ const authors = [
     ],
     image: {
       id: 2,
-      original: 'http://localhost:8000/uploads/authors/sarah-johnson.jpg',
-      thumbnail: 'http://localhost:8000/uploads/authors/sarah-johnson.jpg'
+      original: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=300&h=300&fit=crop',
+      thumbnail: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop'
     },
     is_approved: true,
     language: 'en',
@@ -53,8 +53,8 @@ const authors = [
     ],
     image: {
       id: 3,
-      original: 'http://localhost:8000/uploads/authors/michael-brown.jpg',
-      thumbnail: 'http://localhost:8000/uploads/authors/michael-brown.jpg'
+      original: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop',
+      thumbnail: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop'
     },
     is_approved: false,
     language: 'en',
@@ -193,8 +193,8 @@ router.post('/', [
       socials: socials || [],
       image: {
         id: authors.length + 1,
-        original: 'http://localhost:8000/uploads/authors/default.jpg',
-        thumbnail: 'http://localhost:8000/uploads/authors/default.jpg'
+        original: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=300&h=300&fit=crop',
+        thumbnail: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop'
       },
       is_approved: false,
       language: 'en',

@@ -8,15 +8,18 @@ import { useTranslation } from 'react-i18next';
 import { useAtom } from 'jotai';
 import { useState } from 'react';
 import { couponAtom } from '@store/checkout';
+import { useShopIdWithFallback } from '../../hooks/use-shop-id';
 
 export function useCoupons(
   options?: Partial<CouponQueryOptions>,
   config?: any,
 ) {
   const { locale } = useRouter();
+  const shopId = useShopIdWithFallback(options?.shop_id);
 
   const formattedOptions = {
     ...options,
+    shop_id: shopId,
     language: locale,
   };
 

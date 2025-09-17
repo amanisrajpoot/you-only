@@ -70,7 +70,7 @@ export class HttpClient {
           return `categories.slug:${parsedValues[k]};`;
         }
         if (k === 'tags') {
-          return `tags.slug:${parsedValues[k]};`;
+          return `tags:${parsedValues[k]};`;
         }
         if (k === 'variations') {
           return `variations.value:${parsedValues[k]};`;

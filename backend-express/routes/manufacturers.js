@@ -17,8 +17,8 @@ const manufacturers = [
     ],
     image: {
       id: 1,
-      original: 'http://localhost:8000/uploads/manufacturers/apple.jpg',
-      thumbnail: 'http://localhost:8000/uploads/manufacturers/apple.jpg'
+      original: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=300&h=300&fit=crop',
+      thumbnail: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=150&h=150&fit=crop'
     },
     is_approved: true,
     language: 'en',
@@ -37,8 +37,8 @@ const manufacturers = [
     ],
     image: {
       id: 2,
-      original: 'http://localhost:8000/uploads/manufacturers/samsung.jpg',
-      thumbnail: 'http://localhost:8000/uploads/manufacturers/samsung.jpg'
+      original: 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=300&h=300&fit=crop',
+      thumbnail: 'https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=150&h=150&fit=crop'
     },
     is_approved: true,
     language: 'en',
@@ -57,8 +57,8 @@ const manufacturers = [
     ],
     image: {
       id: 3,
-      original: 'http://localhost:8000/uploads/manufacturers/sony.jpg',
-      thumbnail: 'http://localhost:8000/uploads/manufacturers/sony.jpg'
+      original: 'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=300&h=300&fit=crop',
+      thumbnail: 'https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=150&h=150&fit=crop'
     },
     is_approved: false,
     language: 'en',
@@ -199,8 +199,8 @@ router.post('/', [
       socials: socials || [],
       image: {
         id: manufacturers.length + 1,
-        original: 'http://localhost:8000/uploads/manufacturers/default.jpg',
-        thumbnail: 'http://localhost:8000/uploads/manufacturers/default.jpg'
+        original: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=300&fit=crop',
+        thumbnail: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=150&h=150&fit=crop'
       },
       is_approved: false,
       language: 'en',

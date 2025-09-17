@@ -245,7 +245,7 @@ router.get('/top-rate-product', async (req, res) => {
         total_reviews: 125,
         total_sales: 250,
         revenue: 50000,
-        image: 'http://localhost:8000/uploads/headphones.jpg',
+        image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop',
         shop: {
           id: 1,
           name: 'Tech Store',
@@ -260,7 +260,7 @@ router.get('/top-rate-product', async (req, res) => {
         total_reviews: 98,
         total_sales: 200,
         revenue: 40000,
-        image: 'http://localhost:8000/uploads/smartwatch.jpg',
+        image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&h=500&fit=crop',
         shop: {
           id: 1,
           name: 'Tech Store',
@@ -275,7 +275,7 @@ router.get('/top-rate-product', async (req, res) => {
         total_reviews: 87,
         total_sales: 150,
         revenue: 15000,
-        image: 'http://localhost:8000/uploads/laptopstand.jpg',
+        image: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=500&h=500&fit=crop',
         shop: {
           id: 2,
           name: 'Office Supplies',
@@ -290,7 +290,7 @@ router.get('/top-rate-product', async (req, res) => {
         total_reviews: 156,
         total_sales: 300,
         revenue: 18000,
-        image: 'http://localhost:8000/uploads/tshirt.jpg',
+        image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500&h=500&fit=crop',
         shop: {
           id: 3,
           name: 'Fashion Store',

@@ -27,6 +27,8 @@ const nextConfig = {
       'lh3.googleusercontent.com',
       'chawkbazarlaravel.s3.ap-southeast-1.amazonaws.com',
       '127.0.0.1:8000',
+      'images.unsplash.com',
+      'logos-world.net',
     ],
   },
   ...(process.env.APPLICATION_MODE === 'production' && {

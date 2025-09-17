@@ -21,8 +21,53 @@ export const ScheduleGrid: React.FC<ScheduleProps> = ({
   const { deliveryTime: schedules } = useSettings();
 
   const [selectedSchedule, setSchedule] = useAtom(deliveryTimeAtom);
+  
+  // Default delivery times if not provided by settings
+  const defaultSchedules = [
+    {
+      id: 1,
+      title: 'Same Day Delivery',
+      slug: 'same-day-delivery',
+      description: 'Get your order delivered on the same day',
+      minimum_duration: 1,
+      maximum_duration: 1,
+      duration_unit: 'day',
+      active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: 2,
+      title: 'Next Day Delivery',
+      slug: 'next-day-delivery',
+      description: 'Get your order delivered the next day',
+      minimum_duration: 1,
+      maximum_duration: 2,
+      duration_unit: 'day',
+      active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    },
+    {
+      id: 3,
+      title: 'Standard Delivery',
+      slug: 'standard-delivery',
+      description: 'Standard delivery within 3-5 business days',
+      minimum_duration: 3,
+      maximum_duration: 5,
+      duration_unit: 'day',
+      active: true,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }
+  ];
+
+  const availableSchedules = schedules && schedules.length > 0 ? schedules : defaultSchedules;
+
   useEffect(() => {
-    setSchedule(schedules[0]);
+    if (availableSchedules && availableSchedules.length > 0) {
+      setSchedule(availableSchedules[0]);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -38,11 +83,11 @@ export const ScheduleGrid: React.FC<ScheduleProps> = ({
         </div>
       </div>
 
-      {schedules && schedules?.length ? (
+      {availableSchedules && availableSchedules?.length ? (
         <RadioGroup value={selectedSchedule} onChange={setSchedule}>
           <RadioGroup.Label className="sr-only">{label}</RadioGroup.Label>
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3">
-            {schedules?.map((schedule: any, idx: number) => (
+            {availableSchedules?.map((schedule: any, idx: number) => (
               <RadioGroup.Option
                 value={schedule}
                 key={idx}

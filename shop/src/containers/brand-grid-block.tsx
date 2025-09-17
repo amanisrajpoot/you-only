@@ -32,12 +32,12 @@ const BrandGridBlock: React.FC<BrandProps> = ({
     limit: 16,
   });
 
-  if (!loading && isEmpty(brands?.data)) {
+  if (!loading && isEmpty(brands)) {
     return <NotFoundItem text={t('text-no-brands-found')} />;
   }
 
   // Filter brands for grid layout
-  const gridBrands: Type[] = filterBrands(brands?.data, 'grid-layout');
+  const gridBrands: Type[] = filterBrands(brands, 'grid-layout');
   let items: any = [];
 
   if (limit) {

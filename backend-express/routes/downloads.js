@@ -36,7 +36,7 @@ const downloads = [
     digital_file: {
       id: 1,
       file_name: 'software_license_key.txt',
-      file_url: 'http://localhost:8000/uploads/digital_files/license_key.txt',
+      file_url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop',
       file_size: 1024
     },
     download_count: 2,
@@ -78,7 +78,7 @@ const downloads = [
     digital_file: {
       id: 2,
       file_name: 'ebook_collection.pdf',
-      file_url: 'http://localhost:8000/uploads/digital_files/ebook.pdf',
+      file_url: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&h=500&fit=crop',
       file_size: 5120
     },
     download_count: 1,

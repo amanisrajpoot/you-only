@@ -58,12 +58,12 @@ const BrandBlock: React.FC<BrandProps> = ({
     limit: 16,
   });
 
-  if (!loading && isEmpty(brands?.data)) {
+  if (!loading && isEmpty(brands)) {
     return <NotFoundItem text={t('text-no-brands-found')} />;
   }
 
   // Filter brands for grid layout
-  const sliderBrand: Type[] = filterBrands(brands?.data, 'slider-layout');
+  const sliderBrand: Type[] = filterBrands(brands, 'slider-layout');
 
   return (
     <div className={className}>
@@ -80,7 +80,7 @@ const BrandBlock: React.FC<BrandProps> = ({
           prevActivateId="brandsSlidePrev"
           nextActivateId="brandsSlideNext"
         >
-          {loading && !brands?.data
+          {loading && !brands
             ? Array.from({ length: 7 }).map((_, idx) => (
                 <SwiperSlide key={idx}>
                   <CardRoundedLoader uniqueKey={`category-${idx}`} />

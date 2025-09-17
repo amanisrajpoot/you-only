@@ -28,6 +28,7 @@ import { getDirection } from '@utils/get-direction';
 import PageLoader from '@components/ui/page-loader/page-loader';
 import ErrorMessage from '@components/ui/error-message';
 import { SettingsProvider } from '@contexts/settings.context';
+import { ShopProvider } from '@contexts/shop.context';
 import { useSettings } from '@framework/settings';
 import type { NextPage } from 'next';
 import PrivateRoute from '@lib/private-route';
@@ -85,22 +86,24 @@ function CustomApp({
         <QueryClientProvider client={queryClient}>
           <Hydrate state={pageProps.dehydratedState}>
             <AppSettings>
-              <ManagedUIContext>
-                <DefaultSeo />
-                <Maintenance>
-                  {Boolean(authProps) ? (
-                    <PrivateRoute>
-                      {getLayout(<Component {...pageProps} />)}
-                    </PrivateRoute>
-                  ) : (
-                    getLayout(<Component {...pageProps} />)
-                  )}
-                </Maintenance>
-                <ToastContainer autoClose={2000} theme="colored" />
-                <SocialLoginProvider />
-                <ManagedModal />
-                <ManagedDrawer />
-              </ManagedUIContext>
+              <ShopProvider>
+                <ManagedUIContext>
+                  <DefaultSeo />
+                  <Maintenance>
+                    {Boolean(authProps) ? (
+                      <PrivateRoute>
+                        {getLayout(<Component {...pageProps} />)}
+                      </PrivateRoute>
+                    ) : (
+                      getLayout(<Component {...pageProps} />)
+                    )}
+                  </Maintenance>
+                  <ToastContainer autoClose={2000} theme="colored" />
+                  <SocialLoginProvider />
+                  <ManagedModal />
+                  <ManagedDrawer />
+                </ManagedUIContext>
+              </ShopProvider>
             </AppSettings>
           </Hydrate>
           {/* <ReactQueryDevtools /> */}

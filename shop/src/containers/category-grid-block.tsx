@@ -77,7 +77,7 @@ const CategoryGridBlock: React.FC<CategoriesProps> = ({
                       </SwiperSlide>
                     )
                   )
-                : categories?.data?.map((category) => (
+                : categories?.map((category) => (
                     <SwiperSlide key={`category--key${category.id}`}>
                       <CategoryCard category={category} />
                     </SwiperSlide>
@@ -94,7 +94,7 @@ const CategoryGridBlock: React.FC<CategoriesProps> = ({
                     />
                   )
                 )
-              : categories?.data?.map((category) => (
+              : categories?.map((category) => (
                   <CategoryCard
                     key={`category--key${category.id}`}
                     category={category}

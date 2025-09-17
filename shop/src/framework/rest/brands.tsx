@@ -40,7 +40,7 @@ export const useBrands = (options: TypeQueryOptionsType) => {
     language: locale,
   };
 
-  return useQuery<Type[], Error>(
+  const { data, isLoading, error } = useQuery<TypePaginator, Error>(
     [API_ENDPOINTS.TYPE, formattedOptions],
     ({ queryKey, pageParam }) =>
       client.brands.find(Object.assign({}, queryKey[1], pageParam)),
@@ -48,6 +48,12 @@ export const useBrands = (options: TypeQueryOptionsType) => {
       keepPreviousData: true,
     }
   );
+
+  return {
+    data: data?.data ?? [],
+    isLoading,
+    error,
+  };
 };
 
 export const useBrand = (slug: string) => {

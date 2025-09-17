@@ -1,12 +1,15 @@
 import React from "react";
 import { useProductsInfinite } from "@framework/products";
 import ProductInfiniteGrid from "@components/product/product-infinite-grid";
+import { useShopIdWithFallback } from "../../hooks/use-shop-id";
 
 type Props = {
-  shopId: string;
+  shopId?: string | number | null;
 };
 
 const ShopProductsGrid: React.FC<Props> = ({ shopId }) => {
+  const fallbackShopId = useShopIdWithFallback(shopId);
+  
   const {
     isLoading,
     isFetchingNextPage: loadingMore,
@@ -15,7 +18,7 @@ const ShopProductsGrid: React.FC<Props> = ({ shopId }) => {
     data,
     error,
   } = useProductsInfinite({
-    ...(Boolean(shopId) && { shop_id: Number(shopId) }),
+    ...(Boolean(fallbackShopId) && { shop_id: Number(fallbackShopId) }),
   });
 
   if (error) return <p>{error.message}</p>;

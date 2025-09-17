@@ -87,25 +87,8 @@ router.get('/', async (req, res) => {
     const offset = (currentPage - 1) * perPage;
     const paginatedAttributes = filteredAttributes.slice(offset, offset + perPage);
 
-    // Format response to match Laravel's formatAPIResourcePaginate
-    res.json({
-      data: paginatedAttributes,
-      links: {
-        first: `?page=1`,
-        last: `?page=${totalPages}`,
-        prev: currentPage > 1 ? `?page=${currentPage - 1}` : null,
-        next: currentPage < totalPages ? `?page=${currentPage + 1}` : null
-      },
-      meta: {
-        current_page: currentPage,
-        from: offset + 1,
-        last_page: totalPages,
-        path: req.originalUrl.split('?')[0],
-        per_page: perPage,
-        to: Math.min(offset + perPage, total),
-        total
-      }
-    });
+    // Return data directly for frontend compatibility
+    res.json(paginatedAttributes);
 
   } catch (error) {
     console.error('Get attributes error:', error);
