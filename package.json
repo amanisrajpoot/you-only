@@ -15,6 +15,10 @@
     "dev:admin-rest": "yarn workspace @chawkbazar/admin-rest dev",
     "build:admin-rest": "yarn workspace @chawkbazar/admin-rest build",
     "start:admin-rest": "yarn workspace @chawkbazar/admin-rest start",
+    "deploy:backend": "cd backend-express && railway up",
+    "deploy:shop": "cd shop && vercel --prod",
+    "deploy:admin": "cd admin/rest && vercel --prod",
+    "deploy:all": "powershell -ExecutionPolicy Bypass -File deploy.ps1",
     "prepare": "husky install"
   },
   "devDependencies": {
