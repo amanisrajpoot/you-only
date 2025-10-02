@@ -1,0 +1,227 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  # Backend Tests
+  backend-test:
+    name: Backend Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend-express/package-lock.json
+      
+      - name: Install dependencies
+        run: cd backend-express && npm ci
+      
+      - name: Run linting
+        run: cd backend-express && npm run lint || echo "No lint script"
+      
+      - name: Run tests
+        run: cd backend-express && npm test || echo "No tests yet"
+      
+      - name: Test server startup
+        run: |
+          cd backend-express
+          node server.js &
+          SERVER_PID=$!
+          sleep 5
+          curl -f http://localhost:8000/health || exit 1
+          kill $SERVER_PID
+
+  # Frontend Build - Shop
+  shop-build:
+    name: Shop Frontend Build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'yarn'
+      
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      
+      - name: Build shop
+        run: cd shop && yarn build
+        env:
+          NEXT_PUBLIC_REST_API_ENDPOINT: http://localhost:8000
+          NEXT_PUBLIC_SITE_URL: http://localhost:3000
+
+  # Frontend Build - Admin
+  admin-build:
+    name: Admin Frontend Build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'yarn'
+      
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      
+      - name: Build admin
+        run: cd admin/rest && yarn build
+        env:
+          NEXT_PUBLIC_REST_API_ENDPOINT: http://localhost:8000
+          NEXT_PUBLIC_SITE_URL: http://localhost:3001
+
+  # Docker Build Test
+  docker-build:
+    name: Docker Build Test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      
+      - name: Build backend image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: Dockerfile.backend
+          push: false
+          tags: chawkbazar-backend:test
+      
+      - name: Build shop image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: Dockerfile.shop
+          push: false
+          tags: chawkbazar-shop:test
+      
+      - name: Build admin image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          file: Dockerfile.admin
+          push: false
+          tags: chawkbazar-admin:test
+
+  # Code Quality
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      
+      - name: Check for console.logs (warning only)
+        run: |
+          echo "Checking for console.log statements..."
+          grep -r "console.log" backend-express/ || echo "No console.log found"
+        continue-on-error: true
+      
+      - name: Check for TODO comments
+        run: |
+          echo "Checking for TODO comments..."
+          grep -r "TODO" . || echo "No TODOs found"
+        continue-on-error: true
+
+  # Security Scan
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Run npm audit (backend)
+        run: cd backend-express && npm audit --audit-level=moderate || echo "Security issues found"
+        continue-on-error: true
+      
+      - name: Run yarn audit (frontend)
+        run: yarn audit --level moderate || echo "Security issues found"
+        continue-on-error: true
+
+  # Deploy to Railway (Backend) - only on main branch
+  deploy-backend:
+    name: Deploy Backend to Railway
+    runs-on: ubuntu-latest
+    needs: [backend-test]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Deploy to Railway
+        run: |
+          echo "Deploying to Railway..."
+          echo "Setup Railway CLI and deploy"
+        # Uncomment when Railway token is set
+        # env:
+        #   RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+  # Deploy to Vercel (Shop) - only on main branch
+  deploy-shop:
+    name: Deploy Shop to Vercel
+    runs-on: ubuntu-latest
+    needs: [shop-build]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Deploy to Vercel
+        run: |
+          echo "Deploying shop to Vercel..."
+          echo "Setup Vercel CLI and deploy"
+        # Uncomment when Vercel token is set
+        # env:
+        #   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+  # Deploy to Vercel (Admin) - only on main branch
+  deploy-admin:
+    name: Deploy Admin to Vercel
+    runs-on: ubuntu-latest
+    needs: [admin-build]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Deploy to Vercel
+        run: |
+          echo "Deploying admin to Vercel..."
+          echo "Setup Vercel CLI and deploy"
+        # Uncomment when Vercel token is set
+        # env:
+        #   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}

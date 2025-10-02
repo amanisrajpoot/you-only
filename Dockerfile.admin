@@ -1,0 +1,44 @@
+# Admin Frontend Dockerfile
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Copy package files
+COPY package.json yarn.lock ./
+COPY admin/rest/package.json ./admin/rest/
+
+# Install dependencies
+RUN yarn install --frozen-lockfile
+
+# Copy source code
+COPY admin/rest ./admin/rest
+
+# Build application
+WORKDIR /app/admin/rest
+RUN yarn build
+
+# Production image
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY --from=builder /app/package.json /app/yarn.lock ./
+COPY --from=builder /app/admin/rest/package.json ./admin/rest/
+
+# Install production dependencies only
+RUN yarn install --production --frozen-lockfile
+
+# Copy built application
+COPY --from=builder /app/admin/rest/.next ./admin/rest/.next
+COPY --from=builder /app/admin/rest/public ./admin/rest/public
+COPY --from=builder /app/admin/rest/next.config.js ./admin/rest/
+COPY --from=builder /app/admin/rest/next-i18next.config.js ./admin/rest/
+
+WORKDIR /app/admin/rest
+
+# Expose port
+EXPOSE 3001
+
+# Start application
+CMD ["yarn", "start"]

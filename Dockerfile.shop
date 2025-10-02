@@ -1,0 +1,44 @@
+# Shop Frontend Dockerfile
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Copy package files
+COPY package.json yarn.lock ./
+COPY shop/package.json ./shop/
+
+# Install dependencies
+RUN yarn install --frozen-lockfile
+
+# Copy source code
+COPY shop ./shop
+
+# Build application
+WORKDIR /app/shop
+RUN yarn build
+
+# Production image
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy package files
+COPY --from=builder /app/package.json /app/yarn.lock ./
+COPY --from=builder /app/shop/package.json ./shop/
+
+# Install production dependencies only
+RUN yarn install --production --frozen-lockfile
+
+# Copy built application
+COPY --from=builder /app/shop/.next ./shop/.next
+COPY --from=builder /app/shop/public ./shop/public
+COPY --from=builder /app/shop/next.config.js ./shop/
+COPY --from=builder /app/shop/next-i18next.config.js ./shop/
+
+WORKDIR /app/shop
+
+# Expose port
+EXPOSE 3000
+
+# Start application
+CMD ["yarn", "start"]
